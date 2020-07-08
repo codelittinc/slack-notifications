@@ -1,6 +1,5 @@
 require './controllers/application_controller'
 require 'slack-ruby-client'
-require 'pry'
 
 class ReactionsController < ApplicationController
   def index

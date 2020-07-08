@@ -7,4 +7,5 @@ gem 'slack-ruby-client'
 
 group :development, :test do
   gem "rerun"
+  gem "dotenv"
 end

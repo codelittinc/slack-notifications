@@ -1,4 +1,4 @@
-require 'dotenv/load'
+require 'dotenv/load' if ENV["RACK_ENV"] != "production"
 require 'sinatra'
 require './controllers/channel_messages_controller'
 require './controllers/direct_messages_controller'
