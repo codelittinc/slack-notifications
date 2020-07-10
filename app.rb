@@ -1,5 +1,6 @@
 require 'dotenv/load' if ENV["RACK_ENV"] != "production"
 require 'sinatra'
+require 'gelf'
 require './controllers/channel_messages_controller'
 require './controllers/direct_messages_controller'
 require './controllers/direct_ephemeral_messages_controller'
@@ -59,7 +60,8 @@ end
 error do
   err =  env['sinatra.error']
   # log errors
-  puts err
+  log = GELF::Logger.new("logs.codelitt.dev", 12201, "WAN", { host: ENV['LOG_HOST'], environment: ENV['LOG_ENV'] })
+  log.error ["ERROR: #{err.to_s}", @body.to_s, err.backtrace].flatten.join("\n")
 
   # render error summary
   status 400
