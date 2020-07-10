@@ -5,6 +5,11 @@ require './controllers/direct_messages_controller'
 require './controllers/direct_ephemeral_messages_controller'
 require './controllers/reactions_controller'
 require './controllers/users_controller'
+
+configure do
+  set :show_exceptions, false
+end
+
 before do
   content_type :json
   body = request.body.read
@@ -49,4 +54,14 @@ end
 
 get '/users' do
   UsersController.new(@body, response).index
+end
+
+error do
+  err =  env['sinatra.error']
+  # log errors
+  puts err
+
+  # render error summary
+  status 400
+  render_json({ error: err.to_s })
 end
