@@ -5,10 +5,16 @@ require './controllers/direct_messages_controller'
 require './controllers/direct_ephemeral_messages_controller'
 require './controllers/reactions_controller'
 require './controllers/users_controller'
-
 before do
   content_type :json
   body = request.body.read
+
+  key = env['HTTP_AUTHORIZATION']
+  clean_key = key&.gsub(/Bearer /, '')
+
+  if clean_key != ENV['AUTHENTICATION_KEY']
+    halt 401
+  end
 
   @body = JSON.parse body if !body.empty?
 end
