@@ -36,7 +36,7 @@ class ReactionsController < ApplicationController
 
   def clean_reactions!
     reactions = list_reactions
-    reactions.each do |reaction|
+    reactions&.each do |reaction|
       remove_reaction!(reaction["name"])
     end
   end
