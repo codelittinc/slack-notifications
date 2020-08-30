@@ -1,4 +1,5 @@
 require 'dotenv/load' if ENV["RACK_ENV"] != "production"
+
 require 'sinatra'
 require 'gelf'
 require './controllers/channel_messages_controller'
@@ -6,23 +7,31 @@ require './controllers/direct_messages_controller'
 require './controllers/direct_ephemeral_messages_controller'
 require './controllers/reactions_controller'
 require './controllers/users_controller'
+require './models/access_tokens'
+require './services/slack_oauth'
 
 configure do
   set :show_exceptions, false
 end
 
-before do
-  content_type :json
-  body = request.body.read
-
+def authenticate!
   key = env['HTTP_AUTHORIZATION']
   clean_key = key&.gsub(/Bearer /, '')
 
   if clean_key != ENV['AUTHENTICATION_KEY']
     halt 401
   end
+end
+
+before do
+  content_type :json
+  body = request.body.read
 
   @body = JSON.parse body if !body.empty?
+
+  if (@body && @body["team"])
+    @slack_team_key = AccessTokens.new.by_team_id(@body["team"])[:value]
+  end
 end
 
 def render_json json
@@ -34,27 +43,46 @@ get '/' do
 end
 
 post '/channel-messages' do
-  ChannelMessagesController.new(@body, response).create!
+  authenticate!
+  ChannelMessagesController.new(@body, response, @slack_team_key).create!
 end
 
 patch '/channel-messages' do
-  ChannelMessagesController.new(@body, response).update!
+  authenticate!
+  ChannelMessagesController.new(@body, response, @slack_team_key).update!
 end
 
 post '/direct-messages' do
-  DirectMessagesController.new(@body, response).create!
+  authenticate!
+  DirectMessagesController.new(@body, response, @slack_team_key).create!
 end
 
 post '/direct-ephemeral-messages' do
-  DirecEphemeraltMessagesController.new(@body, response).create!
+  authenticate!
+  DirecEphemeraltMessagesController.new(@body, response, @slack_team_key).create!
 end
 
 post '/reactions' do
-  ReactionsController.new(@body, response).create!
+  authenticate!
+  ReactionsController.new(@body, response, @slack_team_key).create!
 end
 
 get '/users' do
-  UsersController.new(@body, response).index
+  authenticate!
+  UsersController.new(@body, response, @slack_key).index
+end
+
+get '/oauth' do
+  code = params[:code]
+  data = SlackOauth.new(code).authenticate!
+  access_token = data.with_indifferent_access[:access_token]
+  team_id = data.with_indifferent_access[:team][:id]
+
+  AccessTokens.new.create!(access_token, team_id)
+
+  response.body = JSON.dump({
+    status: 'success'
+  })
 end
 
 error do
