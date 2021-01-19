@@ -10,6 +10,7 @@ class ApplicationController
   def respond!(json)
     @response.body = JSON.dump(json)
   end
+
   def message
     @params[:message]
   end
