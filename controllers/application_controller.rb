@@ -3,7 +3,7 @@ class ApplicationController
     Slack.configure do |config|
       config.token = ENV['SLACK_API_KEY']
     end
-    @params = params&.with_indifferent_access
+    @params = JSON.parse(params, symbolize_name: true)
     @response = response
   end
 
