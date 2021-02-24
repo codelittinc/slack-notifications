@@ -13,7 +13,7 @@ The goal of this applications is to make create a simple interface to connect yo
 2. bundle install
 4. cp .env.example .env
 3. set your `SLACK_API_KEY` on .env with your Slack app authorizarion key on
-4. set your `AUTHENTICATION_KEY` on .env with any value you would like to receive in the `Authorization` header 
+4. set your `AUTHENTICATION_KEY` on .env with any value you would like to receive in the `Authorization` header
 5. bundle exec rerun "ruby app.rb -p 4000"
 
 Note: the `rerun` will start an auto reload, meaning that every time you change a line of code it will automatically restart the server
