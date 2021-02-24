@@ -12,7 +12,7 @@ GEM
     ffi (1.14.2)
     gelf (3.1.0)
       json
-    gli (2.19.2)
+    gli (2.20.0)
     hashie (4.1.0)
     json (2.5.1)
     listen (3.4.1)
@@ -35,7 +35,7 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.1.0)
       tilt (~> 2.0)
-    slack-ruby-client (0.15.1)
+    slack-ruby-client (0.16.0)
       faraday (>= 1.0)
       faraday_middleware
       gli
@@ -55,6 +55,9 @@ DEPENDENCIES
   rerun
   sinatra
   slack-ruby-client
+
+RUBY VERSION
+   ruby 2.7.2p137
 
 BUNDLED WITH
    2.1.4

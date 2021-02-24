@@ -2,6 +2,8 @@
 
 source "https://rubygems.org"
 
+ruby '2.7.2'
+
 gem "sinatra"
 gem 'slack-ruby-client'
 gem 'gelf'
