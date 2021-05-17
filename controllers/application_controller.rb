@@ -4,7 +4,7 @@ class ApplicationController
       config.token = ENV['SLACK_API_KEY']
     end
 
-    @params = params.transform_keys(&:to_sym)
+    @params = params&.transform_keys(&:to_sym)
     @response = response
   end
 
