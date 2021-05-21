@@ -1,0 +1,24 @@
+name: PROD DEPLOY
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+jobs:
+  build-and-deploy-to-convox:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set tag version
+      run: echo "TAG_VERSION=\"$(echo $GITHUB_REF | sed 's/.*tags\///')\"" >> $GITHUB_ENV
+
+    - name: Set image name
+      run: echo "IMG_NAME=kaiomagalhaes/roadrunner-notifications:${{env.TAG_VERSION}}" >> $GITHUB_ENV
+
+    - name: Build image with webpack
+      uses: dfreilich/pack-action@v1
+      with:
+        args: 'build ${{ env.IMG_NAME }} --path /github/workspace/ --builder heroku/buildpacks:20 --publish'
+        username: kaiomagalhaes
+        password: ${{ secrets.DOCKER_PASS }}
