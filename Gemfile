@@ -11,4 +11,5 @@ gem 'gelf'
 group :development, :test do
   gem "rerun"
   gem "dotenv"
+  gem "byebug"
 end

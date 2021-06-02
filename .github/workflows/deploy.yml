@@ -7,9 +7,6 @@ name: Deploy to Heroku
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -43,10 +40,10 @@ jobs:
         # Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled
         docker_heroku_process_type: # optional, default is web
         # Set if your app is located in a subdirectory.
-        appdir: # optional, default is 
+        appdir: # optional, default is
         # A URL to which a healthcheck is performed (checks for 200 request)
-        healthcheck: # optional, default is 
+        healthcheck: # optional, default is
         # Value to check for when conducting healthcheck request
-        checkstring: # optional, default is 
+        checkstring: # optional, default is
         # Contents of the Procfile to save and deploy
-        procfile: # optional, default is 
+        procfile: # optional, default is
