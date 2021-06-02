@@ -13,6 +13,8 @@ end
 
 before do
   content_type :json
+  return if request.path == '/'
+
   body = request.body.read
 
   key = env['HTTP_AUTHORIZATION']
