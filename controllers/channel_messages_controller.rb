@@ -3,8 +3,12 @@ require 'slack-ruby-client'
 
 class ChannelMessagesController < ApplicationController
   def create!
-    response = client.chat_postMessage(channel: formatted_channel, text: message, thread_ts: ts, link_names: true)
-
+    response = {}
+    begin
+      response = client.chat_postMessage(channel: formatted_channel, text: message, thread_ts: ts, link_names: true)
+    rescue Slack::Web::Api::Errors::TooManyRequestsError
+      response = {error: 'Too many messages'}
+    end
     respond!(response)
   end
 
